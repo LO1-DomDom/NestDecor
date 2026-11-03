@@ -1,0 +1,15 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: nestdecor-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      # Optional: set your own admin key. If unset, the documented demo key "nestdecor-demo-key" is used.
+      # - key: ADMIN_API_KEY
+      #   sync: false

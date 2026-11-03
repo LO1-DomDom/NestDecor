@@ -1,0 +1,660 @@
+openapi: 3.0.3
+info:
+  title: NestDecor API
+  version: 1.0.0
+  description: |
+    Backend for **NestDecor**, a mobile app that helps first-time renters furnish a bare room within a budget
+    (group *Domdom*, course CO3043 Mobile Application Development, Bach Khoa University).
+
+    The API has **two collections**:
+
+    | Collection | Purpose |
+    | --- | --- |
+    | **Catalog** | Curated catalog of real, purchasable furniture: browse, filter, detail, seller link tracking, and admin CRUD. |
+    | **Rooms** | A user's room plan: size and budget, the room profile produced by the on-device model (style, light, palette), matched recommendations, and the saved shortlist. |
+
+    ### How the two collections work together
+    1. `POST /api/rooms` with length, width and budget.
+    2. `PUT /api/rooms/{roomId}/analysis` with the style, light level and palette read **on the phone** (photos are never sent to this API).
+    3. `GET /api/rooms/{roomId}/recommendations` returns catalog items that fit the room size and the remaining budget, ranked by style match.
+    4. `POST /api/rooms/{roomId}/saved-items` saves an item; `POST /api/catalog/products/{productId}/click` records that the seller link was opened (the signal for assumption A6).
+
+    ### Notes for testers
+    - Click **Try it out** on any endpoint. No login is needed for reads or for the Rooms collection.
+    - **Write operations on the Catalog** (`POST`, `PUT`, `DELETE`) need the `x-api-key` header. Click **Authorize** and enter the demo key `nestdecor-demo-key`.
+    - Rooms are scoped to a device by the optional `X-Device-Id` header (the app has no accounts). If omitted, the device id is `anonymous`.
+    - **Sample data:** the catalog is seeded with 31 *illustrative* items. Sizes and prices are examples; seller links are marketplace search pages, not specific listings. The team replaces them with verified items (backlog T7).
+    - Data is kept in memory and resets when the server restarts. Request rate is limited per IP.
+
+    ### Room fit rule
+    An item `fitsRoom` when its floor footprint (`widthCm x depthCm`) is at most **25 %** of the room floor area, and its longest side is at most **80 %** of the room's longer wall.
+
+    ### Recommendation score (0 to 100)
+    `60` points if the item's styles include the room style, plus up to `40` points for being cheaper relative to the remaining budget.
+servers:
+  - url: /
+tags:
+  - name: Catalog
+    description: Collection 1. Curated furniture catalog.
+  - name: Rooms
+    description: Collection 2. Room plans, on-device analysis results, recommendations and saved shortlist.
+  - name: Health
+    description: Liveness check.
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Liveness check
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is up.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, uptimeSeconds, products, rooms]
+                properties:
+                  status: { type: string, example: ok }
+                  uptimeSeconds: { type: integer, example: 120 }
+                  products: { type: integer, example: 31 }
+                  rooms: { type: integer, example: 0 }
+
+  /api/catalog/products:
+    get:
+      tags: [Catalog]
+      summary: List products
+      description: Filter, search, sort and paginate the catalog.
+      operationId: listProducts
+      parameters:
+        - { name: category, in: query, schema: { $ref: '#/components/schemas/Category' } }
+        - { name: style, in: query, schema: { $ref: '#/components/schemas/Style' } }
+        - { name: source, in: query, schema: { $ref: '#/components/schemas/Source' } }
+        - { name: minPrice, in: query, description: Minimum price in VND., schema: { type: integer, minimum: 0 } }
+        - { name: maxPrice, in: query, description: Maximum price in VND., schema: { type: integer, minimum: 0 } }
+        - { name: inStock, in: query, schema: { type: boolean } }
+        - { name: q, in: query, description: Case-insensitive text search in the product name., schema: { type: string, maxLength: 100 } }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [newest, price_asc, price_desc, name], default: newest }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200':
+          description: A page of products.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+    post:
+      tags: [Catalog]
+      summary: Create a product (admin)
+      operationId: createProduct
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductInput' }
+            example:
+              name: Compact bedside table 35cm
+              category: table
+              styles: [minimalism, scandinavian]
+              priceVnd: 210000
+              widthCm: 35
+              depthCm: 30
+              heightCm: 48
+              colors: [white]
+              source: Shopee
+              sellerUrl: https://shopee.vn/search?keyword=tab%20dau%20giuong
+      responses:
+        '201':
+          description: Product created.
+          headers:
+            Location: { schema: { type: string }, description: URL of the new product. }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /api/catalog/products/{productId}:
+    parameters:
+      - { $ref: '#/components/parameters/ProductId' }
+    get:
+      tags: [Catalog]
+      summary: Get one product
+      operationId: getProduct
+      responses:
+        '200':
+          description: The product.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Catalog]
+      summary: Replace a product (admin)
+      operationId: updateProduct
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductInput' }
+      responses:
+        '200':
+          description: The updated product.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Catalog]
+      summary: Delete a product (admin)
+      description: Also removes the product from every room's saved shortlist.
+      operationId: deleteProduct
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204': { description: Deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/catalog/products/{productId}/click:
+    parameters:
+      - { $ref: '#/components/parameters/ProductId' }
+    post:
+      tags: [Catalog]
+      summary: Record a seller-link open
+      description: Call this when the user taps "Buy". It increments the product's `linkClicks` counter and returns the seller URL to open. This is the measurable signal for assumption A6.
+      operationId: recordProductClick
+      responses:
+        '200':
+          description: Click recorded.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ClickResult' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/catalog/categories:
+    get:
+      tags: [Catalog]
+      summary: List categories with product counts
+      operationId: listCategories
+      responses:
+        '200':
+          description: Categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [category, count]
+                      properties:
+                        category: { $ref: '#/components/schemas/Category' }
+                        count: { type: integer, example: 4 }
+
+  /api/catalog/styles:
+    get:
+      tags: [Catalog]
+      summary: List the supported styles with product counts
+      operationId: listStyles
+      responses:
+        '200':
+          description: Styles.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [style, count]
+                      properties:
+                        style: { $ref: '#/components/schemas/Style' }
+                        count: { type: integer, example: 20 }
+
+  /api/rooms:
+    parameters:
+      - { $ref: '#/components/parameters/DeviceId' }
+    get:
+      tags: [Rooms]
+      summary: List this device's rooms
+      operationId: listRooms
+      responses:
+        '200':
+          description: Rooms owned by the device id, newest first.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Room' }
+    post:
+      tags: [Rooms]
+      summary: Create a room plan
+      description: Step 1 of the core path. Room size and budget are typed by the user.
+      operationId: createRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RoomInput' }
+            example:
+              name: My room at dorm B4
+              lengthM: 4
+              widthM: 3
+              budgetVnd: 3000000
+      responses:
+        '201':
+          description: Room created.
+          headers:
+            Location: { schema: { type: string }, description: URL of the new room. }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Room' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /api/rooms/{roomId}:
+    parameters:
+      - { $ref: '#/components/parameters/RoomId' }
+    get:
+      tags: [Rooms]
+      summary: Get a room plan
+      operationId: getRoom
+      responses:
+        '200':
+          description: The room.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Room' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Rooms]
+      summary: Update room name, size or budget
+      operationId: updateRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RoomPatch' }
+            example:
+              budgetVnd: 4500000
+      responses:
+        '200':
+          description: The updated room.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Room' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Rooms]
+      summary: Delete a room and its shortlist
+      operationId: deleteRoom
+      responses:
+        '204': { description: Deleted. }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/rooms/{roomId}/analysis:
+    parameters:
+      - { $ref: '#/components/parameters/RoomId' }
+    put:
+      tags: [Rooms]
+      summary: Store the room profile (style, light, palette)
+      description: |
+        Stores the result that the **on-device model** produced, or the style the user picked manually when the model could not run or the user changed it. Only the result is sent; the photo never leaves the phone.
+        Calling it again replaces the previous analysis (for example, when the user changes the style).
+      operationId: putRoomAnalysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AnalysisInput' }
+            example:
+              style: minimalism
+              lightLevel: bright
+              palette: ['#F5F0E6', '#C8B8A0', '#8A7F72']
+              confidence: 0.82
+              source: on-device
+      responses:
+        '200':
+          description: The room with its analysis.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Room' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/rooms/{roomId}/recommendations:
+    parameters:
+      - { $ref: '#/components/parameters/RoomId' }
+    get:
+      tags: [Rooms]
+      summary: Get catalog items that fit this room
+      description: |
+        Returns in-stock catalog items that **fit the room size** and cost no more than the **remaining budget** (budget minus the saved shortlist). If the room has a style, items of that style rank first and items of other styles are excluded unless `includeOtherStyles=true`.
+        Without an analysis, all styles are returned and `styleApplied` is `null`.
+      operationId: getRecommendations
+      parameters:
+        - { name: category, in: query, schema: { $ref: '#/components/schemas/Category' } }
+        - { name: includeOtherStyles, in: query, schema: { type: boolean, default: false } }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [score, price_asc, price_desc], default: score }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200':
+          description: Matched items.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RecommendationPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/rooms/{roomId}/saved-items:
+    parameters:
+      - { $ref: '#/components/parameters/RoomId' }
+    get:
+      tags: [Rooms]
+      summary: Get the saved shortlist with budget totals
+      operationId: getSavedItems
+      responses:
+        '200':
+          description: The shortlist.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Shortlist' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      tags: [Rooms]
+      summary: Save an item to the shortlist
+      description: Adding an item that is already saved increases its quantity (maximum 10). Saving is allowed beyond the budget; the response sets `overBudget` to `true` so the app can warn the user.
+      operationId: addSavedItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SavedItemInput' }
+            example:
+              productId: p001
+              quantity: 1
+      responses:
+        '201':
+          description: The updated shortlist.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Shortlist' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: The product is out of stock, or the shortlist already has 50 distinct items.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /api/rooms/{roomId}/saved-items/{productId}:
+    parameters:
+      - { $ref: '#/components/parameters/RoomId' }
+      - { $ref: '#/components/parameters/ProductId' }
+    delete:
+      tags: [Rooms]
+      summary: Remove an item from the shortlist
+      operationId: removeSavedItem
+      responses:
+        '200':
+          description: The updated shortlist.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Shortlist' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Required for catalog write operations. Demo key is `nestdecor-demo-key`.
+  parameters:
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      description: Product id such as `p001`.
+      schema: { type: string, pattern: '^p[0-9]{3,6}$', example: p001 }
+    RoomId:
+      name: roomId
+      in: path
+      required: true
+      description: Room id returned by `POST /api/rooms`.
+      schema: { type: string, format: uuid }
+    DeviceId:
+      name: X-Device-Id
+      in: header
+      required: false
+      description: Anonymous device identifier generated by the app. Defaults to `anonymous`.
+      schema: { type: string, minLength: 1, maxLength: 64, pattern: '^[A-Za-z0-9._-]+$', example: demo-device }
+  responses:
+    BadRequest:
+      description: The request is invalid.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error: { code: VALIDATION_ERROR, message: 'request/body/lengthM must be >= 0.5' }
+    Unauthorized:
+      description: Missing or wrong `x-api-key`.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error: { code: UNAUTHORIZED, message: A valid x-api-key header is required. }
+    NotFound:
+      description: The resource does not exist.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error: { code: NOT_FOUND, message: Resource not found. }
+    TooManyRequests:
+      description: Rate limit exceeded.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: NOT_FOUND }
+            message: { type: string }
+    Category:
+      type: string
+      enum: [bed, mattress, wardrobe, desk, chair, shelf, lamp, rug, curtain, storage, mirror, table]
+    Style:
+      type: string
+      enum: [minimalism, scandinavian, vintage]
+    Source:
+      type: string
+      enum: [Shopee, Tiki, Workshop, Facebook Marketplace, Other]
+    ProductInput:
+      type: object
+      required: [name, category, styles, priceVnd, widthCm, depthCm, heightCm, source, sellerUrl]
+      additionalProperties: false
+      properties: &productProps
+        name: { type: string, minLength: 2, maxLength: 120 }
+        category: { $ref: '#/components/schemas/Category' }
+        styles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { $ref: '#/components/schemas/Style' }
+        priceVnd: { type: integer, minimum: 1000, maximum: 1000000000 }
+        widthCm: { type: number, minimum: 1, maximum: 1000 }
+        depthCm: { type: number, minimum: 1, maximum: 1000 }
+        heightCm: { type: number, minimum: 1, maximum: 1000 }
+        colors:
+          type: array
+          maxItems: 10
+          items: { type: string, maxLength: 40 }
+        source: { $ref: '#/components/schemas/Source' }
+        sellerUrl: { type: string, format: uri, maxLength: 500 }
+        imageUrl: { type: string, format: uri, maxLength: 500, nullable: true }
+        inStock: { type: boolean, default: true }
+    Product:
+      type: object
+      required: [id, name, category, styles, priceVnd, widthCm, depthCm, heightCm, source, sellerUrl, linkClicks, updatedAt]
+      properties:
+        <<: *productProps
+        id: { type: string, example: p001 }
+        linkClicks: { type: integer, minimum: 0, example: 0 }
+        updatedAt: { type: string, format: date-time }
+    ProductPage:
+      type: object
+      required: [items, page, limit, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Product' }
+        page: { type: integer }
+        limit: { type: integer }
+        total: { type: integer }
+    ClickResult:
+      type: object
+      required: [productId, sellerUrl, linkClicks]
+      properties:
+        productId: { type: string }
+        sellerUrl: { type: string, format: uri }
+        linkClicks: { type: integer }
+    RoomInput:
+      type: object
+      required: [lengthM, widthM, budgetVnd]
+      additionalProperties: false
+      properties:
+        name: { type: string, minLength: 1, maxLength: 80 }
+        lengthM: { type: number, minimum: 0.5, maximum: 30, description: Room length in metres. }
+        widthM: { type: number, minimum: 0.5, maximum: 30, description: Room width in metres. }
+        budgetVnd: { type: integer, minimum: 0, maximum: 1000000000, description: Total budget in VND. }
+    RoomPatch:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        name: { type: string, minLength: 1, maxLength: 80 }
+        lengthM: { type: number, minimum: 0.5, maximum: 30 }
+        widthM: { type: number, minimum: 0.5, maximum: 30 }
+        budgetVnd: { type: integer, minimum: 0, maximum: 1000000000 }
+    AnalysisInput:
+      type: object
+      required: [style, source]
+      additionalProperties: false
+      properties: &analysisProps
+        style: { $ref: '#/components/schemas/Style' }
+        lightLevel: { type: string, enum: [dark, dim, normal, bright] }
+        palette:
+          type: array
+          maxItems: 6
+          items: { type: string, pattern: '^#[0-9A-Fa-f]{6}$' }
+          description: Dominant colours as hex codes.
+        confidence: { type: number, minimum: 0, maximum: 1, description: Model confidence. Omit for manual choices. }
+        source:
+          type: string
+          enum: [on-device, manual]
+          description: '`on-device` when the model produced it, `manual` when the user chose or changed the style.'
+    Analysis:
+      type: object
+      nullable: true
+      required: [style, source, analysedAt]
+      properties:
+        <<: *analysisProps
+        analysedAt: { type: string, format: date-time }
+    Room:
+      type: object
+      required: [id, lengthM, widthM, areaM2, budgetVnd, analysis, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        lengthM: { type: number }
+        widthM: { type: number }
+        areaM2: { type: number, description: 'lengthM x widthM, rounded to 2 decimals.' }
+        budgetVnd: { type: integer }
+        analysis: { $ref: '#/components/schemas/Analysis' }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    Recommendation:
+      type: object
+      required: [product, fitsRoom, styleMatch, score]
+      properties:
+        product: { $ref: '#/components/schemas/Product' }
+        fitsRoom: { type: boolean, example: true }
+        styleMatch: { type: boolean }
+        score: { type: integer, minimum: 0, maximum: 100 }
+    RecommendationPage:
+      type: object
+      required: [roomId, styleApplied, budgetVnd, savedTotalVnd, budgetRemainingVnd, items, page, limit, total]
+      properties:
+        roomId: { type: string, format: uuid }
+        styleApplied: { type: string, nullable: true, enum: [minimalism, scandinavian, vintage, null] }
+        budgetVnd: { type: integer }
+        savedTotalVnd: { type: integer }
+        budgetRemainingVnd: { type: integer }
+        hint:
+          type: string
+          description: Present when the list is empty, with a suggestion for the user.
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Recommendation' }
+        page: { type: integer }
+        limit: { type: integer }
+        total: { type: integer }
+    SavedItemInput:
+      type: object
+      required: [productId]
+      additionalProperties: false
+      properties:
+        productId: { type: string, pattern: '^p[0-9]{3,6}$' }
+        quantity: { type: integer, minimum: 1, maximum: 10, default: 1 }
+    SavedLine:
+      type: object
+      required: [product, quantity, lineTotalVnd]
+      properties:
+        product: { $ref: '#/components/schemas/Product' }
+        quantity: { type: integer }
+        lineTotalVnd: { type: integer }
+    Shortlist:
+      type: object
+      required: [roomId, items, totalVnd, budgetVnd, budgetRemainingVnd, overBudget]
+      properties:
+        roomId: { type: string, format: uuid }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/SavedLine' }
+        totalVnd: { type: integer }
+        budgetVnd: { type: integer }
+        budgetRemainingVnd: { type: integer, description: Can be negative when over budget. }
+        overBudget: { type: boolean }

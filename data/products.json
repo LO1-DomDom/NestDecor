@@ -1,0 +1,662 @@
+[
+  {
+    "id": "p001",
+    "name": "Folding bed frame 1m2, engineered wood",
+    "category": "bed",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 850000,
+    "widthCm": 120,
+    "depthCm": 200,
+    "heightCm": 40,
+    "colors": [
+      "natural wood",
+      "white"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=giuong%20gap%20go%20cong%20nghiep%201m2",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p002",
+    "name": "Platform bed 1m4 with drawers",
+    "category": "bed",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 2350000,
+    "widthCm": 140,
+    "depthCm": 200,
+    "heightCm": 35,
+    "colors": [
+      "light oak",
+      "white"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=giuong%20ngu%201m4%20co%20ngan%20keo",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p003",
+    "name": "Wrought-iron bed frame 1m2",
+    "category": "bed",
+    "styles": [
+      "vintage"
+    ],
+    "priceVnd": 1450000,
+    "widthCm": 120,
+    "depthCm": 200,
+    "heightCm": 90,
+    "colors": [
+      "black"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=giuong%20sat%201m2",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p004",
+    "name": "Floor futon mattress 90cm",
+    "category": "mattress",
+    "styles": [
+      "minimalism",
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 520000,
+    "widthCm": 90,
+    "depthCm": 190,
+    "heightCm": 8,
+    "colors": [
+      "grey"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=nem%20topper%2090x190",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p005",
+    "name": "Foam mattress 1m2 x 10cm",
+    "category": "mattress",
+    "styles": [
+      "minimalism",
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 1180000,
+    "widthCm": 120,
+    "depthCm": 200,
+    "heightCm": 10,
+    "colors": [
+      "white"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=nem%20foam%201m2%2010cm",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p006",
+    "name": "3-compartment fabric wardrobe",
+    "category": "wardrobe",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 450000,
+    "widthCm": 130,
+    "depthCm": 45,
+    "heightCm": 170,
+    "colors": [
+      "beige",
+      "grey"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=tu%20quan%20ao%20vai%203%20ngan",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p007",
+    "name": "Open clothes rack with shelf",
+    "category": "wardrobe",
+    "styles": [
+      "minimalism",
+      "vintage"
+    ],
+    "priceVnd": 390000,
+    "widthCm": 90,
+    "depthCm": 40,
+    "heightCm": 160,
+    "colors": [
+      "black"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ke%20treo%20quan%20ao%20co%20ke",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p008",
+    "name": "2-door wooden wardrobe 80cm",
+    "category": "wardrobe",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 1890000,
+    "widthCm": 80,
+    "depthCm": 50,
+    "heightCm": 180,
+    "colors": [
+      "light oak"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=tu%20quan%20ao%20go%202%20canh",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p009",
+    "name": "Foldable study desk 100cm",
+    "category": "desk",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 320000,
+    "widthCm": 100,
+    "depthCm": 50,
+    "heightCm": 74,
+    "colors": [
+      "natural wood",
+      "white"
+    ],
+    "source": "Workshop",
+    "sellerUrl": "https://www.facebook.com/marketplace/search/?query=ban%20hoc%20gap%20gon",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p010",
+    "name": "Desk 120cm with shelf",
+    "category": "desk",
+    "styles": [
+      "minimalism"
+    ],
+    "priceVnd": 690000,
+    "widthCm": 120,
+    "depthCm": 55,
+    "heightCm": 120,
+    "colors": [
+      "white",
+      "black"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ban%20lam%20viec%201m2%20co%20ke",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p011",
+    "name": "Retro writing desk 110cm",
+    "category": "desk",
+    "styles": [
+      "vintage"
+    ],
+    "priceVnd": 1250000,
+    "widthCm": 110,
+    "depthCm": 55,
+    "heightCm": 76,
+    "colors": [
+      "walnut"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ban%20lam%20viec%20go%20vintage",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p012",
+    "name": "Mesh ergonomic chair",
+    "category": "chair",
+    "styles": [
+      "minimalism"
+    ],
+    "priceVnd": 590000,
+    "widthCm": 55,
+    "depthCm": 55,
+    "heightCm": 95,
+    "colors": [
+      "black"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ghe%20van%20phong%20luoi",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p013",
+    "name": "Wooden dining chair",
+    "category": "chair",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 280000,
+    "widthCm": 42,
+    "depthCm": 45,
+    "heightCm": 82,
+    "colors": [
+      "light oak"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=ghe%20go%20an",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p014",
+    "name": "Folding stool",
+    "category": "chair",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 95000,
+    "widthCm": 30,
+    "depthCm": 30,
+    "heightCm": 45,
+    "colors": [
+      "white"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ghe%20xep%20nho",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p015",
+    "name": "3-tier bookshelf 60cm",
+    "category": "shelf",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 240000,
+    "widthCm": 60,
+    "depthCm": 28,
+    "heightCm": 110,
+    "colors": [
+      "white"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ke%20sach%203%20tang",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p016",
+    "name": "5-tier ladder shelf",
+    "category": "shelf",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 420000,
+    "widthCm": 55,
+    "depthCm": 35,
+    "heightCm": 170,
+    "colors": [
+      "walnut"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=ke%20sach%205%20tang",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p017",
+    "name": "Wall floating shelf set (3)",
+    "category": "shelf",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 135000,
+    "widthCm": 60,
+    "depthCm": 18,
+    "heightCm": 3,
+    "colors": [
+      "white",
+      "light oak"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ke%20treo%20tuong%203%20cai",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p018",
+    "name": "Desk lamp, warm LED",
+    "category": "lamp",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 160000,
+    "widthCm": 15,
+    "depthCm": 15,
+    "heightCm": 40,
+    "colors": [
+      "white"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=den%20ban%20led",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p019",
+    "name": "Rattan pendant lamp 40cm",
+    "category": "lamp",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 210000,
+    "widthCm": 40,
+    "depthCm": 40,
+    "heightCm": 30,
+    "colors": [
+      "rattan"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=den%20tha%20may%20tre",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p020",
+    "name": "Floor lamp, tripod",
+    "category": "lamp",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 480000,
+    "widthCm": 40,
+    "depthCm": 40,
+    "heightCm": 150,
+    "colors": [
+      "black",
+      "wood"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=den%20cay%20dung",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p021",
+    "name": "Shaggy rug 120x160",
+    "category": "rug",
+    "styles": [
+      "scandinavian",
+      "minimalism"
+    ],
+    "priceVnd": 290000,
+    "widthCm": 120,
+    "depthCm": 160,
+    "heightCm": 2,
+    "colors": [
+      "cream"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=tham%20long%20120x160",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p022",
+    "name": "Persian-style rug 100x150",
+    "category": "rug",
+    "styles": [
+      "vintage"
+    ],
+    "priceVnd": 360000,
+    "widthCm": 100,
+    "depthCm": 150,
+    "heightCm": 1,
+    "colors": [
+      "red",
+      "navy"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=tham%20trai%20san%20hoa%20van",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p023",
+    "name": "Blackout curtain 1m4 x 2m5",
+    "category": "curtain",
+    "styles": [
+      "minimalism",
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 230000,
+    "widthCm": 140,
+    "depthCm": 2,
+    "heightCm": 250,
+    "colors": [
+      "beige",
+      "grey"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=rem%20cua%20chong%20nang",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p024",
+    "name": "Storage basket set (3)",
+    "category": "storage",
+    "styles": [
+      "scandinavian",
+      "minimalism"
+    ],
+    "priceVnd": 175000,
+    "widthCm": 35,
+    "depthCm": 25,
+    "heightCm": 25,
+    "colors": [
+      "natural"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=gio%20dung%20do%20set%203",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p025",
+    "name": "Under-bed storage box (2)",
+    "category": "storage",
+    "styles": [
+      "minimalism",
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 150000,
+    "widthCm": 75,
+    "depthCm": 45,
+    "heightCm": 17,
+    "colors": [
+      "grey"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=hop%20dung%20do%20gam%20giuong",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p026",
+    "name": "Shoe rack 4-tier",
+    "category": "storage",
+    "styles": [
+      "minimalism"
+    ],
+    "priceVnd": 190000,
+    "widthCm": 60,
+    "depthCm": 28,
+    "heightCm": 80,
+    "colors": [
+      "white",
+      "black"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=ke%20giay%204%20tang",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p027",
+    "name": "Full-length mirror 40x140",
+    "category": "mirror",
+    "styles": [
+      "minimalism",
+      "scandinavian"
+    ],
+    "priceVnd": 330000,
+    "widthCm": 40,
+    "depthCm": 3,
+    "heightCm": 140,
+    "colors": [
+      "black frame"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=guong%20dung%20toan%20than",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p028",
+    "name": "Round wall mirror 50cm",
+    "category": "mirror",
+    "styles": [
+      "vintage",
+      "scandinavian"
+    ],
+    "priceVnd": 250000,
+    "widthCm": 50,
+    "depthCm": 3,
+    "heightCm": 50,
+    "colors": [
+      "gold"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=guong%20tron%20treo%20tuong",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p029",
+    "name": "Bedside table 40cm",
+    "category": "table",
+    "styles": [
+      "scandinavian",
+      "minimalism"
+    ],
+    "priceVnd": 260000,
+    "widthCm": 40,
+    "depthCm": 35,
+    "heightCm": 50,
+    "colors": [
+      "light oak",
+      "white"
+    ],
+    "source": "Shopee",
+    "sellerUrl": "https://shopee.vn/search?keyword=tab%20dau%20giuong",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p030",
+    "name": "Low coffee table 60cm",
+    "category": "table",
+    "styles": [
+      "scandinavian",
+      "vintage"
+    ],
+    "priceVnd": 380000,
+    "widthCm": 60,
+    "depthCm": 60,
+    "heightCm": 40,
+    "colors": [
+      "walnut"
+    ],
+    "source": "Tiki",
+    "sellerUrl": "https://tiki.vn/search?q=ban%20tra%20sofa%20nho",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "p031",
+    "name": "Used 1m2 bed frame (second-hand group)",
+    "category": "bed",
+    "styles": [
+      "minimalism",
+      "vintage"
+    ],
+    "priceVnd": 600000,
+    "widthCm": 120,
+    "depthCm": 200,
+    "heightCm": 45,
+    "colors": [
+      "wood"
+    ],
+    "source": "Facebook Marketplace",
+    "sellerUrl": "https://www.facebook.com/marketplace/search/?query=giuong%201m2%20cu",
+    "imageUrl": null,
+    "inStock": true,
+    "updatedAt": "2026-11-03T00:00:00.000Z"
+  }
+]
